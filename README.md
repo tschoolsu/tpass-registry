@@ -1,0 +1,121 @@
+# tpass-registry
+
+TSchool **T-Pass 服務註冊表**。整個生態系「有哪些服務」的唯一真相就是這個 repo 的 `services.json`。
+
+想讓你的服務上線並出現在門戶大廳（`portal.tschoolsu.org`）？**對這個 repo 開一個 PR，加一個 JSON 物件，就這樣。** 不需要改任何其他 repo 的程式碼。
+
+---
+
+## 這份檔案驅動什麼
+
+| 消費者 | 讀它做什麼 |
+| --- | --- |
+| `tpass-portal` | 產生門戶大廳的服務卡片（顯示名、圖示、配色、網址） |
+| `tpass-auth` | 產生可以發證的服務白名單（不在清單裡 → 登入被拒） |
+| `tpass-ops` 的 `deploy.sh` / `ecosystem.config.js` | 決定部署哪些服務、目錄在哪、跑哪個 port、DB 怎麼套 |
+
+所以**這裡改一次，三邊自動跟上**。反過來說：這裡沒改，其他地方改再多也沒用。
+
+---
+
+## 怎麼加一個服務
+
+```bash
+# 1. Fork 這個 repo（GitHub 網頁按 Fork，或用 gh）
+gh repo fork YC815/tpass-registry --clone
+cd tpass-registry
+
+# 2. 開一個分支
+git checkout -b add-lost
+
+# 3. 編輯 services.json，在 services 陣列末端加一筆（範例見下）
+
+# 4. 本機先驗一次（不需要安裝任何依賴）
+node validate.mjs
+
+# 5. 送出
+git commit -am "registry: 登記 lost（遺失物）"
+git push -u origin add-lost
+gh pr create --fill
+```
+
+維運 review + merge 之後，重新部署 `auth` 與 `portal`，你的服務就可以登入、卡片就會出現在大廳。
+
+---
+
+## 欄位
+
+```jsonc
+{
+  "id": "lost",              // 短名。＝pm2 程序名＝TPASS_SERVICE_ID＝JWT 的 aud 後綴。★ 永不改名
+  "name": "T-Lost 遺失物",    // ops 用的長名（CLI、部署 log 顯示）
+  "dir": "tpass-lost",       // repo 目錄名。本機與主機一致
+  "subdomain": "lost",       // 本機＝lost.lvh.me；正式＝lost.tschoolsu.org
+  "port": 3007,              // 內部 port（只綁 127.0.0.1，對外靠 nginx 反代）。撞車會被 validate.mjs 擋下
+  "db": {                    // 沒有資料庫就填 null
+    "name": "t_lost",        // 資料庫名（慣例 t_<id>）
+    "user": "t_lost",        // 專屬 role（慣例 t_<id>）
+    "strategy": "migrate"    // migrate = 有 migrations 歷史（標準做法）；push 僅限原型
+  },
+  "enabled": true,           // false = 本機工具與 auth 白名單全部跳過（封存用）
+  "deployed": false,         // true = 納入部署，且卡片才會出現在大廳。首次上線成功後才翻 true
+  "portal": {                // ★ 選填。沒有這塊 = 不進大廳（例如 auth 這種純後端服務）
+    "label": "遺失物",        // 卡片顯示名（可以跟 name 不同，通常更短）
+    "icon": "Search",        // lucide-react 圖示的 PascalCase 名，見下
+    "tone": "orange",        // green | blue | orange | violet | rose
+    "roles": ["all"]         // all | student | teacher
+  }
+}
+```
+
+### 圖示怎麼選
+
+到 https://lucide.dev/icons 找一個，用它的 **PascalCase** 名（網址上的 `clipboard-list` → 寫成 `ClipboardList`）。
+
+portal 為了讓卡片能在伺服器端就渲染出來（不然每次進大廳會先閃一排空卡），維護一份圖示白名單。
+**用了白名單以外的名字，portal 一啟動就會直接報錯並印出可用清單**——不會靜默換成別的圖示，
+所以絕不會發生「上線後才發現卡片圖不對」。若你要的圖示不在清單裡，在 PR 說明裡提一句，
+維運會順手在 `tpass-portal` 的 `src/config/icons.ts` 加一行。
+
+### 卡片網址不寫在這裡
+
+大廳卡片的網址由 `subdomain` + 頂層 `domains` + `port` **自動推導**：
+
+- 本機 → `https://<subdomain>.lvh.me:<port>`
+- 正式 → `https://<subdomain>.tschoolsu.org`（無 port）
+
+**不要**在任何地方寫死網域。這是刻意的設計：寫死的話本機門戶會把人送去正式站，本機根本測不了 SSO 互通。
+
+### 卡片什麼時候才會出現
+
+三個條件同時成立：`enabled: true` **且** `deployed: true` **且**有 `portal` 區塊。
+
+所以還沒上線的服務可以先登記進來（`deployed: false`）佔住 id 與 port，不會提早出現在大廳。上線成功後再開一個 PR 把 `deployed` 翻成 `true`。
+
+---
+
+## 驗證規則
+
+`node validate.mjs`（CI 每個 PR 都會跑）檢查：
+
+- `id` / `dir` / `subdomain` / `port` 在**啟用中**的服務之間不重複（封存服務允許保留歷史值）
+- 必填欄位齊全、`enabled` / `deployed` 是布林、不能 `deployed:true` 但 `enabled:false`
+- `db` 要嘛是 `null`，要嘛有 `name` + `user` + 合法的 `strategy`
+- `portal.tone` / `portal.roles` 只能是允許的值、`label` 與 `icon` 非空
+- 發證端（`issuer`）不得有 `portal` 區塊——它不是使用者的目的地
+
+---
+
+## 相關文件
+
+- **開新服務 → 串登入 → 上線**（部員動手版）：`YC815/tpass-ops` 的 `docs/NEW-SERVICE.md`
+- **SSO 串接契約**（驗章四鐵則、payload、錯誤碼）：`YC815/tpass-auth` 的 `INTEGRATION.md`
+- **開發與維運手冊**：`YC815/tpass-ops` 的 `docs/ONBOARDING.md`
+
+---
+
+## 這裡沒有秘密
+
+本 repo 刻意公開，讓任何部員 fork + PR 就能提註冊，不必先被加成 collaborator。
+裡面**沒有任何密鑰**：port 只綁 `127.0.0.1`，DB 名稱與 role 名不含密碼（密碼在各服務主機上的 `.env.local`，不進 git）。
+**任何密鑰都不該出現在這個 repo。**
