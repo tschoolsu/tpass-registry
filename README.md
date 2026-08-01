@@ -22,7 +22,7 @@ TSchool **T-Pass 服務註冊表**。整個生態系「有哪些服務」的唯�
 
 ```bash
 # 1. Fork 這個 repo（GitHub 網頁按 Fork，或用 gh）
-gh repo fork YC815/tpass-registry --clone
+gh repo fork tschoolsu/tpass-registry --clone
 cd tpass-registry
 
 # 2. 開一個分支
@@ -113,9 +113,9 @@ portal 為了讓卡片能在伺服器端就渲染出來（不然每次進大廳�
 
 ## 相關文件
 
-- **開新服務 → 串登入 → 上線**（部員動手版）：`YC815/tpass-ops` 的 `docs/NEW-SERVICE.md`
-- **SSO 串接契約**（驗章四鐵則、payload、錯誤碼）：`YC815/tpass-auth` 的 `INTEGRATION.md`
-- **開發與維運手冊**：`YC815/tpass-ops` 的 `docs/ONBOARDING.md`
+- **開新服務 → 串登入 → 上線**（部員動手版）：`tschoolsu/tpass-ops` 的 `docs/NEW-SERVICE.md`
+- **SSO 串接契約**（驗章四鐵則、payload、錯誤碼）：`tschoolsu/tpass-auth` 的 `INTEGRATION.md`
+- **開發與維運手冊**：`tschoolsu/tpass-ops` 的 `docs/ONBOARDING.md`
 
 ---
 
