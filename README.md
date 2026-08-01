@@ -58,7 +58,8 @@ gh pr create --fill
     "strategy": "migrate"    // migrate = 有 migrations 歷史（標準做法）；push 僅限原型
   },
   "enabled": true,           // false = 本機工具與 auth 白名單全部跳過（封存用）
-  "deployed": false,         // true = 納入部署，且卡片才會出現在大廳。首次上線成功後才翻 true
+  "deployed": false,         // 產生 pm2 程序清單、決定卡片出不出現。登記時填 false 佔位，
+                             // 主機前置備妥、要真正上線時再開一個 PR 翻 true
   "portal": {                // ★ 選填。沒有這塊 = 不進大廳（例如 auth 這種純後端服務）
     "label": "遺失物",        // 卡片顯示名（可以跟 name 不同，通常更短）
     "icon": "Search",        // lucide-react 圖示的 PascalCase 名，見下
@@ -90,7 +91,11 @@ portal 為了讓卡片能在伺服器端就渲染出來（不然每次進大廳�
 
 三個條件同時成立：`enabled: true` **且** `deployed: true` **且**有 `portal` 區塊。
 
-所以還沒上線的服務可以先登記進來（`deployed: false`）佔住 id 與 port，不會提早出現在大廳。上線成功後再開一個 PR 把 `deployed` 翻成 `true`。
+所以還沒上線的服務可以先登記進來（`deployed: false`）佔住 id 與 port，不會提早出現在大廳。
+
+> ⚠️ `deployed` 同時也決定 **pm2 的程序清單**。主機第一次部署你的服務**之前**就必須翻成 `true`，
+> 否則部署腳本找不到你的服務。翻 `true` 的時機是「主機前置（DNS / nginx / DB）都備妥、要真正
+> 上線了」，不是「部署成功之後」——順序見 `tpass-ops` 的 `docs/NEW-SERVICE.md`〈部署〉。
 
 ---
 
