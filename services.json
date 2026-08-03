@@ -88,6 +88,23 @@
       "note": "2026-07-05 封存；port 由 3004 移至 3005 解決與 appeals 撞車"
     },
     {
+      "id": "notes",
+      "name": "T-Notes 學術部共編筆記",
+      "dir": "tpass-notes",
+      "subdomain": "notes",
+      "port": 3007,
+      "db": { "name": "t_notes", "user": "t_notes", "strategy": "none" },
+      "enabled": true,
+      "deployed": false,
+      "note": "2026-08-03 納管。repo 在 Ray1020-a/tpass-notes（不在 tschoolsu 組織）。不是 Prisma，用 pg + POSTGRES_URL，schema 自理，故 strategy:none。deployed 仍為 false：主機那份還是 npm 裝的、無 pnpm-lock.yaml、目錄為 root 所有，deploy.sh 跑不動。",
+      "portal": {
+        "label": "共編筆記",
+        "icon": "BookOpen",
+        "tone": "green",
+        "roles": ["all"]
+      }
+    },
+    {
       "id": "vote",
       "name": "T-Vote 選舉",
       "dir": "tpass-vote",
