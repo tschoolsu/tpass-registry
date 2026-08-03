@@ -2,7 +2,11 @@
   "$comment": "TSchool T-Pass 服務註冊表——唯一真相來源。ops 腳本 / deploy.sh / ecosystem.config.js 讀它決定部署哪些服務；tpass-portal 讀它產生大廳卡片；tpass-auth 讀它產生發證白名單。不得在任何程式碼裡另行硬編碼服務清單、port、目錄名或網域。欄位說明見 README.md。",
   "issuer": "auth",
   "domains": { "dev": "lvh.me", "prod": "tschoolsu.org" },
-  "server": { "root": "~/tpass" },
+  "server": {
+    "$comment": "主機上的路徑約定（本機不適用——本機你想放哪都行，只要 repo 並排）。ops repo（deploy.sh / ecosystem.config.js / 這份註冊表的 clone）住 opsRoot；各服務 repo 一律是 servicesRoot/<dir>，一個服務一層，那個目錄底下不放別的東西。",
+    "opsRoot": "~/tpass",
+    "servicesRoot": "/home/service"
+  },
   "services": [
     {
       "id": "auth",

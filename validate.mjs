@@ -21,6 +21,11 @@ try {
 
 // ── 頂層 ──────────────────────────────────────────────
 if (!data.domains?.dev || !data.domains?.prod) bad("domains 必須有 dev 與 prod");
+for (const key of ["opsRoot", "servicesRoot"]) {
+  const p = data.server?.[key];
+  if (!p) bad(`server.${key} 必填（主機路徑約定）`);
+  else if (!p.startsWith("/") && !p.startsWith("~/")) bad(`server.${key} 必須是絕對路徑或 ~/ 開頭，收到「${p}」`);
+}
 if (!Array.isArray(data.services) || data.services.length === 0) {
   console.error("✗ services 必須是非空陣列");
   process.exit(1);
