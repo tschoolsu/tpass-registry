@@ -49,7 +49,7 @@ gh pr create --fill
 {
   "id": "lost",              // 短名。＝pm2 程序名＝TPASS_SERVICE_ID＝JWT 的 aud 後綴。★ 永不改名
   "name": "T-Lost 遺失物",    // ops 用的長名（CLI、部署 log 顯示）
-  "dir": "tpass-lost",       // repo 目錄名。本機與主機一致
+  "dir": "tpass-lost",       // repo 目錄名（只寫目錄名，不寫路徑）。主機上就是 /home/service/tpass-lost，見〈主機把它放哪〉
   "subdomain": "lost",       // 本機＝lost.lvh.me；正式＝lost.tschoolsu.org
   "port": 3007,              // 內部 port（只綁 127.0.0.1，對外靠 nginx 反代）。撞車會被 validate.mjs 擋下
   "db": {                    // 沒有資料庫就填 null
@@ -77,6 +77,33 @@ portal 為了讓卡片能在伺服器端就渲染出來（不然每次進大廳�
 **用了白名單以外的名字，portal 一啟動就會直接報錯並印出可用清單**——不會靜默換成別的圖示，
 所以絕不會發生「上線後才發現卡片圖不對」。若你要的圖示不在清單裡，在 PR 說明裡提一句，
 維運會順手在 `tpass-portal` 的 `src/config/icons.ts` 加一行。
+
+### 主機把它放哪
+
+`dir` **只寫目錄名**，不寫路徑。路徑由頂層的 `server` 區塊決定：
+
+```jsonc
+"server": {
+  "opsRoot": "~/tpass",          // ops repo（deploy.sh / ecosystem.config.js / 這份註冊表的 clone）
+  "servicesRoot": "/home/service" // 各服務 repo 的家
+}
+```
+
+所以主機上你的服務會被 clone 到 **`/home/service/tpass-lost`**，pm2 的 `cwd` 也是它。
+
+```
+/home/service/          ← 只放服務 repo，一個服務一層，不放別的東西
+├── tpass-auth/
+├── tpass-portal/
+├── tpass-lost/         ← 你的
+~/tpass/                ← ops repo（腳本、部署、文件）+ tpass-registry
+```
+
+服務 repo 不再與 `tpass-registry` 並排，所以**主機上**的 `../tpass-registry` 相對路徑不成立——
+註冊表位置由 ops 層透過 `TPASS_REGISTRY_PATH` 注入（`ecosystem.config.js` 的 env + `deploy.sh` build 前 export），
+你的服務程式碼**不用為此改任何一行**，`.env.local` 也不用寫這個 key。
+
+> **本機不受影響**：本機沿用「repo 並排」的佈局（`tpass-registry` 與各服務同層），`../tpass-registry` 照常成立。
 
 ### 卡片網址不寫在這裡
 
