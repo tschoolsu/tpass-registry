@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 
 const TONES = ["green", "blue", "orange", "violet", "rose"];
 const ROLES = ["all", "student", "teacher"];
-const STRATEGIES = ["push", "migrate"];
+const STRATEGIES = ["push", "migrate", "none"];
 const UNIQUE_KEYS = ["id", "dir", "subdomain", "port"];
 
 const errors = [];

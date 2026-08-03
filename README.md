@@ -55,7 +55,8 @@ gh pr create --fill
   "db": {                    // 沒有資料庫就填 null
     "name": "t_lost",        // 資料庫名（慣例 t_<id>）
     "user": "t_lost",        // 專屬 role（慣例 t_<id>）
-    "strategy": "migrate"    // migrate = 有 migrations 歷史（標準做法）；push 僅限原型
+    "strategy": "migrate"    // migrate = 有 migrations 歷史（標準做法）；push 僅限原型；
+                             // none = 有資料庫但不用 Prisma（自己下 SQL），部署與本機工具都不套 schema
   },
   "enabled": true,           // false = 本機工具與 auth 白名單全部跳過（封存用）
   "deployed": false,         // 產生 pm2 程序清單、決定卡片出不出現。登記時填 false 佔位，
@@ -132,7 +133,7 @@ portal 為了讓卡片能在伺服器端就渲染出來（不然每次進大廳�
 
 - `id` / `dir` / `subdomain` / `port` 在**啟用中**的服務之間不重複（封存服務允許保留歷史值）
 - 必填欄位齊全、`enabled` / `deployed` 是布林、不能 `deployed:true` 但 `enabled:false`
-- `db` 要嘛是 `null`，要嘛有 `name` + `user` + 合法的 `strategy`
+- `db` 要嘛是 `null`（沒有資料庫），要嘛有 `name` + `user` + 合法的 `strategy`（`migrate` / `push` / `none`）
 - `portal.tone` / `portal.roles` 只能是允許的值、`label` 與 `icon` 非空
 - 發證端（`issuer`）不得有 `portal` 區塊——它不是使用者的目的地
 
