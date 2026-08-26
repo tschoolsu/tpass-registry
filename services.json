@@ -95,8 +95,8 @@
       "port": 3007,
       "db": { "name": "t_notes", "user": "t_notes", "strategy": "none" },
       "enabled": true,
-      "deployed": false,
-      "note": "2026-08-03 納管。repo 在 Ray1020-a/tpass-notes（不在 tschoolsu 組織）。不是 Prisma，用 pg + POSTGRES_URL，schema 自理，故 strategy:none。deployed 仍為 false：主機那份還是 npm 裝的、無 pnpm-lock.yaml、目錄為 root 所有，deploy.sh 跑不動。",
+      "deployed": true,
+      "note": "2026-08-03 納管，2026-08-26 上線。repo tschoolsu/tpass-notes（原在 Ray1020-a 底下，已轉移）。不是 Prisma，用 pg + POSTGRES_URL，schema 由服務自己 CREATE TABLE IF NOT EXISTS，故 strategy:none。狀態檔放 uploads/ 而非慣例的 data/，backup.sh 兩者都收。尚未照慣例的部分：沒有 src/config 的 REQUIRED（deploy.sh 的 env 檢查對它是空的）、沒有 error.tsx。",
       "portal": {
         "label": "共編筆記",
         "icon": "BookOpen",
@@ -134,6 +134,23 @@
         "label": "直屬配對",
         "icon": "Users",
         "tone": "green",
+        "roles": ["all"]
+      }
+    },
+    {
+      "id": "meeting",
+      "name": "T-Meeting 會議輔助",
+      "dir": "tpass-meeting",
+      "subdomain": "meeting",
+      "port": 3009,
+      "db": { "name": "t_meeting", "user": "t_meeting", "strategy": "none" },
+      "enabled": true,
+      "deployed": false,
+      "note": "2026-08-26 納管。repo tschoolsu/tpass-meeting（原名 meeting-support），開發中。不是 Prisma，用 pg + POSTGRES_URL，故 strategy:none。enabled:true 是為了讓 auth 發得出票——在此之前 meeting 不在註冊表，authorize 一律回 unknown-service，登入是壞的。deployed:false：主機那份 npm 裝、目錄屬 root、自帶 ecosystem.config.js、狀態放 uploads/，deploy.sh 跑不動，目前由 root 的 pm2 手動跑。上線步驟與 notes 相同：轉移目錄所有權、補 pnpm-lock.yaml、移除自帶 ecosystem.config.js、翻 deployed、加 UptimeRobot monitor。tone 與尚未上線的 vote 同為 orange，兩者都要進大廳前需擇一改色。",
+      "portal": {
+        "label": "會議輔助",
+        "icon": "CalendarCheck",
+        "tone": "orange",
         "roles": ["all"]
       }
     }
