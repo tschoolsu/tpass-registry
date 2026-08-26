@@ -153,6 +153,23 @@
         "tone": "orange",
         "roles": ["all"]
       }
+    },
+    {
+      "id": "csm",
+      "name": "T-CSM 課表拉取器",
+      "dir": "tpass-csm",
+      "subdomain": "csm",
+      "port": 3010,
+      "db": null,
+      "enabled": true,
+      "deployed": false,
+      "note": "2026-08-26 登記，服務本身尚未存在（主機沒有目錄、port 沒在聽）。原本是直接寫在主機那份 registry clone 裡、沒推上 GitHub，本 PR 把它帶回正式流程。port 由 30088 改為 3010——其餘服務都在 3000-3009，tpass status 的本機探測與 dev 網址也照這個區段。",
+      "portal": {
+        "label": "課表拉取器",
+        "icon": "Calendar",
+        "tone": "green",
+        "roles": ["all"]
+      }
     }
   ]
 }
