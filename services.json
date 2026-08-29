@@ -155,15 +155,15 @@
       }
     },
     {
-      "id": "csm",
-      "name": "T-CSM 課表拉取器",
-      "dir": "tpass-csm",
-      "subdomain": "csm",
+      "id": "schedule",
+      "name": "T-Schedule 課表拉取器",
+      "dir": "tpass-schedule",
+      "subdomain": "schedule",
       "port": 3010,
       "db": null,
       "enabled": true,
       "deployed": false,
-      "note": "2026-08-26 登記，服務本身尚未存在（主機沒有目錄、port 沒在聽）。原本是直接寫在主機那份 registry clone 裡、沒推上 GitHub，本 PR 把它帶回正式流程。port 由 30088 改為 3010——其餘服務都在 3000-3009，tpass status 的本機探測與 dev 網址也照這個區段。",
+      "note": "2026-08-29 定名 schedule（先前草擬過 csm、主機上曾被手改成 class，兩者都作廢，不要再用）。服務本身尚未存在：沒有 GitHub repo、主機沒有目錄、port 沒在聽。port 由 30088 改為 3010——其餘服務都在 3000-3009，tpass status 的本機探測與 dev 網址也照這個區段。deployed 維持 false，直到服務真的上線。",
       "portal": {
         "label": "課表拉取器",
         "icon": "Calendar",
