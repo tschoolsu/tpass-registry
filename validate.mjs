@@ -7,6 +7,10 @@ const TONES = ["green", "blue", "orange", "violet", "rose"];
 const ROLES = ["all", "student", "teacher"];
 const STRATEGIES = ["push", "migrate", "none"];
 const UNIQUE_KEYS = ["id", "dir", "subdomain", "port"];
+// host：主機 pm2 跑它，走 deploy.sh（預設值，缺 hosting 欄位視同這個）。
+// external：不在主機上跑（例如純前端 GitHub Pages），deploy.sh/ecosystem.config.js
+// 跳過它，port 留 null——tpass status 才不會把「沒人在聽的 port」當成掛掉的服務。
+const HOSTING = ["host", "external"];
 
 const errors = [];
 const bad = (msg) => errors.push(msg);
@@ -35,8 +39,16 @@ if (!data.services.some((s) => s.id === data.issuer)) bad(`issuer「${data.issue
 // ── 每筆必填欄位 ──────────────────────────────────────
 for (const s of data.services) {
   const where = s.id ? `服務「${s.id}」` : JSON.stringify(s);
-  for (const key of [...UNIQUE_KEYS, "name"]) {
+  const hosting = s.hosting ?? "host";
+  if (!HOSTING.includes(hosting)) bad(`${where} 的 hosting 必須是 ${HOSTING.join(" 或 ")}，收到「${s.hosting}」`);
+
+  // external 沒有 port（不在主機上跑），跳過 port 必填檢查；其餘照舊。
+  const requiredKeys = hosting === "external" ? UNIQUE_KEYS.filter((k) => k !== "port") : UNIQUE_KEYS;
+  for (const key of [...requiredKeys, "name"]) {
     if (s[key] === undefined || s[key] === null || s[key] === "") bad(`${where} 缺 ${key}`);
+  }
+  if (hosting === "external" && s.port !== null && s.port !== undefined) {
+    bad(`${where}：hosting 是 external 時 port 應留 null（外部託管，非 null 的 port 會被 tpass status 誤判成掛掉的服務）`);
   }
   if (typeof s.enabled !== "boolean") bad(`${where} 的 enabled 必須是 true/false`);
   if (typeof s.deployed !== "boolean") bad(`${where} 的 deployed 必須是 true/false`);
@@ -49,6 +61,8 @@ for (const s of data.services) {
 for (const key of UNIQUE_KEYS) {
   const seen = new Map();
   for (const s of data.services.filter((x) => x.enabled)) {
+    // external 的 port 一律是 null，不是真的撞號，不參與這個檢查。
+    if (key === "port" && (s.hosting ?? "host") === "external") continue;
     if (seen.has(s[key])) bad(`${key} 重複：「${s[key]}」同時出現在 ${seen.get(s[key])} 與 ${s.id}`);
     seen.set(s[key], s.id);
   }

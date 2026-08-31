@@ -170,6 +170,24 @@
         "tone": "green",
         "roles": ["all"]
       }
+    },
+    {
+      "id": "law",
+      "name": "T-Law 法規系統",
+      "dir": "tpass-regulatory",
+      "subdomain": "law",
+      "port": null,
+      "hosting": "external",
+      "db": null,
+      "enabled": true,
+      "deployed": true,
+      "note": "2026-08-30 納管上線。純前端 Vite SPA，公開查閱學生會章程/校規/行政要點，刻意不接 SSO（純前端 SPA 接不了：token 是 HttpOnly cookie，驗章要後端做，見 tpass-auth/INTEGRATION.md §6）。部署在 GitHub Pages（repo 自己的 .github/workflows/deploy.yml），law.tschoolsu.org 由 Cloudflare CNAME（灰雲）指到 GitHub Pages，不歸主機 pm2 管、deploy.sh 跳過它。port 留 null：hosting=external 沒有行程在聽，非 null 的 port 會被 tpass status 誤判成掛掉的服務。",
+      "portal": {
+        "label": "法規系統",
+        "icon": "Scale",
+        "tone": "blue",
+        "roles": ["all"]
+      }
     }
   ]
 }
