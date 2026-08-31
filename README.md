@@ -52,6 +52,10 @@ gh pr create --fill
   "dir": "tpass-lost",       // repo 目錄名（只寫目錄名，不寫路徑）。主機上就是 /home/service/tpass-lost，見〈主機把它放哪〉
   "subdomain": "lost",       // 本機＝lost.lvh.me；正式＝lost.tschoolsu.org
   "port": 3007,              // 內部 port（只綁 127.0.0.1，對外靠 nginx 反代）。撞車會被 validate.mjs 擋下
+                             // hosting 是 "external" 時填 null，見下
+  "hosting": "host",        // ★ 選填，預設 "host"。"host" = 主機 pm2 跑它，走 deploy.sh；
+                             // "external" = 不在主機上跑（例如純前端、掛在 GitHub Pages），
+                             // deploy.sh / ecosystem.config.js 會跳過它，port 留 null
   "db": {                    // 沒有資料庫就填 null
     "name": "t_lost",        // 資料庫名（慣例 t_<id>）
     "user": "t_lost",        // 專屬 role（慣例 t_<id>）
@@ -121,9 +125,13 @@ portal 為了讓卡片能在伺服器端就渲染出來（不然每次進大廳�
 
 所以還沒上線的服務可以先登記進來（`deployed: false`）佔住 id 與 port，不會提早出現在大廳。
 
-> ⚠️ `deployed` 同時也決定 **pm2 的程序清單**。主機第一次部署你的服務**之前**就必須翻成 `true`，
-> 否則部署腳本找不到你的服務。翻 `true` 的時機是「主機前置（DNS / nginx / DB）都備妥、要真正
-> 上線了」，不是「部署成功之後」——順序見 `tpass-ops` 的 `docs/NEW-SERVICE.md`〈部署〉。
+> ⚠️ `deployed` 同時也決定 **pm2 的程序清單**（`hosting: "host"` 的服務才算，見上）。
+> 主機第一次部署你的服務**之前**就必須翻成 `true`，否則部署腳本找不到你的服務。翻 `true`
+> 的時機是「主機前置（DNS / nginx / DB）都備妥、要真正上線了」，不是「部署成功之後」——
+> 順序見 `tpass-ops` 的 `docs/NEW-SERVICE.md`〈部署〉。
+>
+> `hosting: "external"` 的服務不受這條約束——它本來就不歸 pm2 管，`deployed: true` 只代表
+> 「卡片可以出現在大廳」，翻 true 前不需要先在主機備妥任何東西。
 
 ---
 
