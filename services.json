@@ -145,8 +145,8 @@
       "port": 3009,
       "db": { "name": "t_meeting", "user": "t_meeting", "strategy": "none" },
       "enabled": true,
-      "deployed": false,
-      "note": "2026-08-26 納管。repo tschoolsu/tpass-meeting（原名 meeting-support），開發中。不是 Prisma，用 pg + POSTGRES_URL，故 strategy:none。enabled:true 是為了讓 auth 發得出票——在此之前 meeting 不在註冊表，authorize 一律回 unknown-service，登入是壞的。deployed:false：主機那份 npm 裝、目錄屬 root、自帶 ecosystem.config.js、狀態放 uploads/，deploy.sh 跑不動，目前由 root 的 pm2 手動跑。上線步驟與 notes 相同：轉移目錄所有權、補 pnpm-lock.yaml、移除自帶 ecosystem.config.js、翻 deployed、加 UptimeRobot monitor。tone 與尚未上線的 vote 同為 orange，兩者都要進大廳前需擇一改色。",
+      "deployed": true,
+      "note": "2026-08-26 納管、2026-09-01 上線。repo tschoolsu/tpass-meeting（原名 meeting-support）。不是 Prisma，用 pg + POSTGRES_URL，故 strategy:none；schema 由服務自己 CREATE TABLE IF NOT EXISTS。程式碼已對齊生態系（tpass-ui、tpass-auth-js、env 全走 config/*.ts、pnpm、CI）；self url 的 env 是 MEETING_SELF_URL。tone 與尚未上線的 vote 同為 orange，vote 進大廳前要擇一改色。",
       "portal": {
         "label": "會議輔助",
         "icon": "CalendarCheck",
