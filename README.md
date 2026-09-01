@@ -69,7 +69,7 @@ gh pr create --fill
     "label": "遺失物",        // 卡片顯示名（可以跟 name 不同，通常更短）
     "icon": "Search",        // lucide-react 圖示的 PascalCase 名，見下
     "tone": "orange",        // green | blue | orange | violet | rose
-    "roles": ["all"]         // all | student | teacher
+    "category": "service"    // governance | service | event，大廳分區用（見下）
   }
 }
 ```
@@ -82,6 +82,18 @@ portal 為了讓卡片能在伺服器端就渲染出來（不然每次進大廳�
 **用了白名單以外的名字，portal 一啟動就會直接報錯並印出可用清單**——不會靜默換成別的圖示，
 所以絕不會發生「上線後才發現卡片圖不對」。若你要的圖示不在清單裡，在 PR 說明裡提一句，
 維運會順手在 `tpass-portal` 的 `src/config/icons.ts` 加一行。
+
+### `portal.category` 怎麼選
+
+大廳依這個欄位把卡片分成三段（2026-09-01 起，取代原本形同虛設、全部填 `all` 的 `roles`）：
+
+- **governance**：學生自治正式流程——開會、選舉、查法規（`meeting`／`vote`／`law`）
+- **service**：日常隨時會用到的功能性工具（`form`／`msg`／`appeals`／`notes`）
+- **event**：限定活動的臨時服務，活動結束就下架（`buddy`）
+
+分類軸線是「這是什麼性質的工具」，不是「誰在用」——大部分服務前台對全體開放、
+後台限幹部，天生就不是乾淨的受眾二分。拿不準選哪個就照這三句話的定義判斷，
+不要照猜的受眾分。
 
 ### 主機把它放哪
 

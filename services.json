@@ -41,7 +41,7 @@
         "label": "問卷系統",
         "icon": "ClipboardList",
         "tone": "violet",
-        "roles": ["all"]
+        "category": "service"
       }
     },
     {
@@ -57,7 +57,7 @@
         "label": "跨屆代傳",
         "icon": "MessagesSquare",
         "tone": "blue",
-        "roles": ["all"]
+        "category": "service"
       }
     },
     {
@@ -73,7 +73,7 @@
         "label": "申訴系統",
         "icon": "Gavel",
         "tone": "rose",
-        "roles": ["all"]
+        "category": "service"
       }
     },
     {
@@ -101,7 +101,7 @@
         "label": "共編筆記",
         "icon": "BookOpen",
         "tone": "green",
-        "roles": ["all"]
+        "category": "service"
       }
     },
     {
@@ -117,7 +117,7 @@
         "label": "T-Vote 選舉",
         "icon": "Vote",
         "tone": "orange",
-        "roles": ["all"]
+        "category": "governance"
       }
     },
     {
@@ -134,7 +134,7 @@
         "label": "直屬配對",
         "icon": "Users",
         "tone": "green",
-        "roles": ["all"]
+        "category": "event"
       }
     },
     {
@@ -151,7 +151,7 @@
         "label": "會議輔助",
         "icon": "CalendarCheck",
         "tone": "orange",
-        "roles": ["all"]
+        "category": "governance"
       }
     },
     {
@@ -169,7 +169,7 @@
         "label": "法規系統",
         "icon": "Scale",
         "tone": "blue",
-        "roles": ["all"]
+        "category": "governance"
       }
     }
   ]
