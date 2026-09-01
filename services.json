@@ -160,10 +160,10 @@
       "dir": "tpass-schedule",
       "subdomain": "schedule",
       "port": 3010,
-      "db": null,
+      "db": { "name": "t_schedule", "user": "t_schedule", "strategy": "migrate" },
       "enabled": true,
       "deployed": false,
-      "note": "2026-08-29 定名 schedule（先前草擬過 csm、主機上曾被手改成 class，兩者都作廢，不要再用）。服務本身尚未存在：沒有 GitHub repo、主機沒有目錄、port 沒在聽。port 由 30088 改為 3010——其餘服務都在 3000-3009，tpass status 的本機探測與 dev 網址也照這個區段。deployed 維持 false，直到服務真的上線。",
+      "note": "2026-08-29 定名 schedule（先前草擬過 csm、主機上曾被手改成 class，兩者都作廢，不要再用）。2026-08-30 納管：原型是部員獨立寫的 ClassSuperman，現正對齊平台標準（src/ 佈局、tpass-auth-js、tpass-ui、pnpm）並加 Google Calendar 雙向同步（把個人課表寫進學生自己的主日曆，讓大家在 GCal 原生看到彼此空堂）——GitHub repo 已建。port 3010（其餘服務在 3000-3009，tpass status 的本機探測與 dev 網址照此區段）。deployed 維持 false，直到主機前置（DNS/nginx/DB）備妥並真的部署上去。",
       "portal": {
         "label": "課表拉取器",
         "icon": "Calendar",
