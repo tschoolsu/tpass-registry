@@ -4,7 +4,7 @@
 import { readFileSync } from "node:fs";
 
 const TONES = ["green", "blue", "orange", "violet", "rose"];
-const ROLES = ["all", "student", "teacher"];
+const CATEGORIES = ["governance", "service", "event"];
 const STRATEGIES = ["push", "migrate", "none"];
 const UNIQUE_KEYS = ["id", "dir", "subdomain", "port"];
 // host：主機 pm2 跑它，走 deploy.sh（預設值，缺 hosting 欄位視同這個）。
@@ -79,10 +79,7 @@ for (const s of data.services.filter((x) => x.portal)) {
   if (!p.icon) bad(`${where} 缺 icon（lucide-react 的 PascalCase 圖示名，例 ClipboardList）`);
   else if (!/^[A-Z][A-Za-z0-9]*$/.test(p.icon)) bad(`${where}.icon 必須是 PascalCase，收到「${p.icon}」`);
   if (!TONES.includes(p.tone)) bad(`${where}.tone 必須是 ${TONES.join(" | ")}，收到「${p.tone}」`);
-  if (!Array.isArray(p.roles) || p.roles.length === 0) bad(`${where}.roles 必須是非空陣列`);
-  for (const r of p.roles ?? []) {
-    if (!ROLES.includes(r)) bad(`${where}.roles 含未知值「${r}」，只能是 ${ROLES.join(" | ")}`);
-  }
+  if (!CATEGORIES.includes(p.category)) bad(`${where}.category 必須是 ${CATEGORIES.join(" | ")}，收到「${p.category}」`);
 }
 
 if (errors.length > 0) {
