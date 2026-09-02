@@ -171,6 +171,16 @@
         "tone": "blue",
         "category": "governance"
       }
+    },
+    {
+      "id": "schedule",
+      "name": "課表拉取工具",
+      "dir": null,
+      "subdomain": "schedule",
+      "port": 30001,
+      "db": null,
+      "enabled": true,
+      "deployed": false
     }
   ]
 }
