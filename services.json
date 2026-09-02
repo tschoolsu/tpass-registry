@@ -175,7 +175,7 @@
     {
       "id": "schedule",
       "name": "課表拉取工具",
-      "dir": null,
+      "dir": "home",
       "subdomain": "schedule",
       "port": 30001,
       "db": null,
