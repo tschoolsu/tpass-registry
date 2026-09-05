@@ -95,11 +95,11 @@
       "port": 3006,
       "db": { "name": "t_vote", "user": "t_vote", "strategy": "migrate" },
       "enabled": true,
-      "deployed": false,
+      "deployed": true,
       "portal": {
         "label": "T-Vote 選舉",
         "icon": "Vote",
-        "tone": "orange",
+        "tone": "green",
         "category": "governance"
       }
     },
