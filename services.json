@@ -150,6 +150,17 @@
       }
     },
     {
+      "id": "url",
+      "name": "T-URL 短網址",
+      "dir": "tpass-url",
+      "subdomain": "url",
+      "port": 3007,
+      "db": { "name": "t_url", "user": "t_url", "strategy": "migrate" },
+      "enabled": true,
+      "deployed": false,
+      "note": "2026-09-08 登記。縮網址 + 點擊統計（IP／Cloudflare 地理／UA／JS 層）。只有管理員能建連結，故不放大廳卡片。地理欄位需 Cloudflare Managed Transforms「Add visitor location headers」。"
+    },
+    {
       "id": "schedule",
       "name": "課表拉取工具",
       "dir": "home",
