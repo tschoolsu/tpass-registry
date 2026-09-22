@@ -77,6 +77,17 @@
       }
     },
     {
+      "id": "file",
+      "name": "T-Files 學生會檔案管理系統",
+      "dir": "tpass-file",
+      "subdomain": "file",
+      "port": 3005,
+      "db": { "name": "t_files", "user": "t_files", "strategy": "migrate" },
+      "enabled": true,
+      "deployed": false,
+      "note": "學生會內部檔案服務；使用學校信箱與獨立密碼，不串接 T-Pass SSO。既有資料庫與私有檔案需原址保留，完成主機遷移後再將 deployed 設為 true。"
+    },
+    {
       "id": "directory",
       "name": "T-Directory 目錄（封存）",
       "dir": "tpass-directory",
