@@ -84,8 +84,8 @@
       "port": 3005,
       "db": { "name": "t_files", "user": "t_files", "strategy": "migrate" },
       "enabled": true,
-      "deployed": false,
-      "note": "學生會內部檔案服務；使用學校信箱與獨立密碼，不串接 T-Pass SSO。既有資料庫與私有檔案需原址保留，完成主機遷移後再將 deployed 設為 true。"
+      "deployed": true,
+      "note": "學生會內部檔案服務；使用學校信箱與獨立密碼，不串接 T-Pass SSO。既有資料庫與私有檔案在主機原址保留。"
     },
     {
       "id": "directory",
